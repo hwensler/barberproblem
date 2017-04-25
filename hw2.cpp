@@ -53,8 +53,26 @@ sem_t waitChairs;
 //this is for the barber's chair. there should only be one (mutex).
 sem_t mutexBarber;
 
+//create struct to pass to VisitBarber
+struct thread_details{
+    //the thread id
+    int threadID;
+
+    //the total number of threads
+    int totalCustomers;
+};
+
 void *VisitBarber(void *threadID){
-    sem_wait(&wait)
+
+    //if you can, take a seat
+    sem_wait(&waitChairs);
+
+
+
+    //if the barber is asleep, wake him up
+    sem_wait(&mutex);
+    cout << "Customer " + threadID
+
 }
 
 

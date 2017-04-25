@@ -48,8 +48,16 @@ void *VisitBarber(void *threadID){
 
 }
 
+class Barber {
+public:
+    boolean isAsleep;
+};
+
 
 int main() {
+    //initialize barber
+    Barber barber;
+    barber.isAsleep = true;
 
 
     //introduce the program
@@ -59,7 +67,7 @@ int main() {
     int customerCount = 26;
 
     //get the number of customers - must be between 0 and 25
-    while (customerCount > 25 || customerCount < 0) {
+    while (customerCount > 25 || customerCount <= 0) {
         cout << "How many customers are there?\n"
                 "There must be between 0 and 25 customers.\n";
         cin >> customerCount;
@@ -90,7 +98,9 @@ int main() {
 
     //create threads
     for (int i = 0; i < customerCount; i++) {
-        cout << "creating thread, " << i << endl;
+        //thread creation = leaving for the barber shop
+        cout << "Customer " << i;
+        cout << "is leaving for the barber shop. ";
         errorCheck = pthread_create(&threads[i], &attribute, VisitBarber, (void *) i);
 
         //check that the threads were created
@@ -99,6 +109,9 @@ int main() {
             exit(-1);
         }
     }
+
+    //first, the barber is sleeping
+    cout << "The barber is asleep. \n";
 
     pthread_exit(NULL);
     //create a thread for each customer

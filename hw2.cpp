@@ -172,10 +172,30 @@ int main() {
         }
     }
 
+    //free the attribute and wait for other threads
+    pthread_attr_destroy(&attribute);
 
+    //make an int for results
+    int results;
+
+    //join the threads
+    for (int i = 0; i < customerCount; i++){
+        //this waits for all the results to be completed
+        results = pthread_join(threads[i], &status);
+
+        if (results){
+            cout << "Error:unable to join," << results << endl;
+            exit(-1);
+        }
+
+        cout << "Main: completed thread id :" << i ;
+        cout << "  exiting with status :" << status << endl;
+
+    }
+
+    cout << "Main: program exiting." << endl;
+
+    cout.flush();
     pthread_exit(NULL);
-    //create a thread for each customer
-
-    //put them in an array
 
 }

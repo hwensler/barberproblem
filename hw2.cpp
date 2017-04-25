@@ -63,16 +63,36 @@ struct thread_details{
 };
 
 void *VisitBarber(void *customer_info){
+    //*p is a pointer to this thread_details
+    struct thread_details *p = (struct thread_details*) customer_info;
+    cout << "Customer " + p->threadID;
+    cout <<"arrived at the barber shop. \n ";
+
+    //get the current value of the semaphore
+    int currentValue;
+    sem_getvalue(&waitChairs, &currentValue);
 
     //if you can, take a seat
     sem_wait(&waitChairs);
+    cout << "Customer " + p->threadID;
+    cout << "took a seat in the waiting room. \n";
 
+    //if you're the first person to arrive, wake the barber
+    if(currentValue == p->totalCustomers){
+        cout << "Customer " + p->threadID;
+        cout << "woke the barber.  \n";
+    }
 
-
-    //if the barber is asleep, wake him up
+    //get your hair cut
     sem_wait(&mutexBarber);
-    cout << "Customer " + threadID
+    sem_post(&waitChairs);  //free your waiting room chair
+    cout << "Customer " + p->threadID;
+    cout << "has a new haircut. ";
 
+    //free the barber chair
+    cout << "Customer " + p->threadID;
+    cout << "is leaving the barber shop. ";
+    sem_post(&mutexBarber);
 }
 
 

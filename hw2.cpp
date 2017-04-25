@@ -44,6 +44,9 @@ using namespace std;
  * waiting chairs - user input (use semaphore)
  */
 
+void *VisitBarber(void *threadID){
+
+}
 
 
 int main() {

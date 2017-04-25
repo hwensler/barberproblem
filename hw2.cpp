@@ -66,7 +66,7 @@ void *VisitBarber(void *customer_info){
     //*p is a pointer to this thread_details
     struct thread_details *p = (struct thread_details*) customer_info;
     cout << "Customer " + p->threadID;
-    cout <<"arrived at the barber shop. \n ";
+    cout <<" arrived at the barber shop. \n ";
 
     //get the current value of the semaphore
     int currentValue;
@@ -75,23 +75,23 @@ void *VisitBarber(void *customer_info){
     //if you can, take a seat
     sem_wait(&waitChairs);
     cout << "Customer " + p->threadID;
-    cout << "took a seat in the waiting room. \n";
+    cout << " took a seat in the waiting room. \n";
 
     //if you're the first person to arrive, wake the barber
     if(currentValue == p->totalCustomers){
         cout << "Customer " + p->threadID;
-        cout << "woke the barber.  \n";
+        cout << " woke the barber.  \n";
     }
 
     //get your hair cut
     sem_wait(&mutexBarber);
     sem_post(&waitChairs);  //free your waiting room chair
     cout << "Customer " + p->threadID;
-    cout << "has a new haircut. ";
+    cout << " has a new haircut. ";
 
     //free the barber chair
     cout << "Customer " + p->threadID;
-    cout << "is leaving the barber shop. ";
+    cout << " is leaving the barber shop. ";
     sem_post(&mutexBarber);
 }
 
@@ -153,7 +153,7 @@ int main() {
     for (int i = 0; i < customerCount; i++) {
         //thread creation = leaving for the barber shop
         cout << "Customer " << i;
-        cout << "is leaving for the barber shop. ";
+        cout << " is leaving for the barber shop. ";
 
         //create struct to pass info to VisitBarber
         struct thread_details *thread_args;

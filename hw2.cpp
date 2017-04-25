@@ -45,19 +45,11 @@ using namespace std;
  */
 
 void *VisitBarber(void *threadID){
-
 }
 
-class Barber {
-public:
-    boolean isAsleep;
-};
 
 
 int main() {
-    //initialize barber
-    Barber barber;
-    barber.isAsleep = true;
 
 
     //introduce the program
@@ -96,12 +88,13 @@ int main() {
     pthread_attr_init(&attribute);
     pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_JOINABLE);
 
+
     //create threads
     for (int i = 0; i < customerCount; i++) {
         //thread creation = leaving for the barber shop
         cout << "Customer " << i;
         cout << "is leaving for the barber shop. ";
-        errorCheck = pthread_create(&threads[i], &attribute, VisitBarber, (void *) i);
+        errorCheck = pthread_create(&threads[i], &attribute, &VisitBarber, (void *) barber);
 
         //check that the threads were created
         if (errorCheck) {
@@ -110,8 +103,6 @@ int main() {
         }
     }
 
-    //first, the barber is sleeping
-    cout << "The barber is asleep. \n";
 
     pthread_exit(NULL);
     //create a thread for each customer

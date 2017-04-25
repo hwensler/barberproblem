@@ -46,6 +46,7 @@ using namespace std;
  * waiting chairs - user input (use semaphore)
  */
 
+
 void *VisitBarber(void *threadID){
 
 }
@@ -74,6 +75,10 @@ int main() {
             cout << " which is not between 0 and 25. \n";
         }
     }
+
+    //create semaphores
+    sem_t waitChairs;
+    sem_t mutexBarber;
 
     //create thread ids
     pthread_t threads[customerCount];

@@ -62,7 +62,7 @@ struct thread_details{
     int totalCustomers;
 };
 
-void *VisitBarber(void *threadID){
+void *VisitBarber(void *customer_info){
 
     //if you can, take a seat
     sem_wait(&waitChairs);
@@ -70,7 +70,7 @@ void *VisitBarber(void *threadID){
 
 
     //if the barber is asleep, wake him up
-    sem_wait(&mutex);
+    sem_wait(&mutexBarber);
     cout << "Customer " + threadID
 
 }
@@ -134,7 +134,13 @@ int main() {
         //thread creation = leaving for the barber shop
         cout << "Customer " << i;
         cout << "is leaving for the barber shop. ";
-        errorCheck = pthread_create(&threads[i], &attribute, &VisitBarber, (void *) barber);
+
+        //create struct to pass info to VisitBarber
+        struct thread_details *thread_args;
+        thread_args->totalCustomers = customerCount;
+        thread_args->threadID = i;
+
+        errorCheck = pthread_create(&threads[i], &attribute, &VisitBarber, (void *)thread_args);
 
         //check that the threads were created
         if (errorCheck) {

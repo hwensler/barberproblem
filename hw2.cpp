@@ -77,6 +77,11 @@ int main() {
     //status of the thread
     void *status;
 
+    //initialize and set thread joinable
+    pthread_attr_init(&attribute);
+    pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_JOINABLE);
+
+
     //create a thread for each customer
 
     //put them in an array

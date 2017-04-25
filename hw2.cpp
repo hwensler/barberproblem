@@ -11,6 +11,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <semaphore.h>
+#include <mutex>
 
 using namespace std;
 
@@ -53,6 +54,11 @@ sem_t waitChairs;
 //this is for the barber's chair. there should only be one (mutex).
 sem_t mutexBarber;
 
+
+//this is for the cout function. there should only be one (mutex).
+//it makes cout legible
+pthread_mutex_t coutMutex = PTHREAD_MUTEX_INITIALIZER;
+
 //create struct to pass to VisitBarber
 struct thread_details{
     //the thread id
@@ -65,7 +71,9 @@ struct thread_details{
 void *VisitBarber(void *customer_info){
     //*p is a pointer to this thread_details
     struct thread_details *p = (struct thread_details*) customer_info;
-    cout << "Customer " + p->threadID <<" arrived at the barber shop. \n ";
+    pthread_mutex_lock(&coutMutex);
+    cout << "Customer " << p->threadID <<" arrived at the barber shop.\n ";
+    pthread_mutex_unlock(&coutMutex);
 
     //get the current value of the semaphore
     int currentValue;
@@ -73,20 +81,28 @@ void *VisitBarber(void *customer_info){
 
     //if you can, take a seat
     sem_wait(&waitChairs);
-    cout << "Customer " + p->threadID << " took a seat in the waiting room. \n";
+    pthread_mutex_lock(&coutMutex);
+    cout << "Customer " << p->threadID << " took a seat in the waiting room.\n";
+    pthread_mutex_unlock(&coutMutex);
 
     //if you're the first person to arrive, wake the barber
     if(currentValue == p->totalCustomers){
-        cout << "Customer " + p->threadID << " woke the barber.  \n";
+        pthread_mutex_lock(&coutMutex);
+        cout << "Customer " << p->threadID << " woke the barber.\n";
+        pthread_mutex_unlock(&coutMutex);
     }
 
     //get your hair cut
     sem_wait(&mutexBarber);
     sem_post(&waitChairs);  //free your waiting room chair
-    cout << "Customer " + p->threadID << " has a new haircut. \n";
+    pthread_mutex_lock(&coutMutex);
+    cout << "Customer " << p->threadID << " has a new haircut.\n";
+    pthread_mutex_unlock(&coutMutex);
 
     //free the barber chair
-    cout << "Customer " + p->threadID << " is leaving the barber shop. \n";
+    pthread_mutex_lock(&coutMutex);
+    cout << "Customer " << p->threadID << " is leaving the barber shop. \n";
+    pthread_mutex_unlock(&coutMutex);
     sem_post(&mutexBarber);
 }
 
@@ -111,7 +127,7 @@ int main() {
         if (customerCount > 25 || customerCount < 0) {
             cout << "Sorry, you entered ";
             cout << customerCount;
-            cout << " which is not between 0 and 25. \n";
+            cout << " which is not between 0 and 25.\n";
         }
     }
 
@@ -160,7 +176,9 @@ int main() {
         tempThread = &allThreads[i];
 
         //thread creation = leaving for the barber shop
-        cout << "Customer " << i << " is leaving for the barber shop. \n";
+        pthread_mutex_lock(&coutMutex);
+        cout << "Customer " << i << " is leaving for the barber shop.\n";
+        pthread_mutex_unlock(&coutMutex);
 
         //create the thread
         errorCheck = pthread_create(&threads[i], &attribute, &VisitBarber, (void *)tempThread);
@@ -187,9 +205,10 @@ int main() {
             cout << "Error:unable to join," << results << endl;
             exit(-1);
         }
-
-        cout << "Main: completed thread id :" << i ;
+        pthread_mutex_lock(&coutMutex);
+        cout << "Main: completed thread id :" << i;
         cout << "  exiting with status :" << status << endl;
+        pthread_mutex_unlock(&coutMutex);
 
     }
 

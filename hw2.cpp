@@ -74,6 +74,9 @@ int main() {
     //create thread attributes
     pthread_attr_t attribute;
 
+    //status of the thread
+    void *status;
+
     //create a thread for each customer
 
     //put them in an array

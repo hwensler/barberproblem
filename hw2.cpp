@@ -86,9 +86,11 @@ int main() {
     //this semaphor is for the waiting room chairs.
     //there should be as many resources as there are chairs
     sem_t waitChairs;
+    sem_init(&waitChairs, 0, numChairs);
 
     //this is for the barber's chair. there should only be one (mutex).
     sem_t mutexBarber;
+    sem_init(&mutexBarber, 0 , 1);
 
     //create thread ids
     pthread_t threads[customerCount];

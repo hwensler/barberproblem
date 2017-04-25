@@ -12,10 +12,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8e2b6bb1-396b-4062-b22c-aff21f8681af" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/count.txt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BarberProblem.dir/CXX.includecache" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BarberProblem.dir/CXX.includecache" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hw2.cpp" afterPath="$PROJECT_DIR$/hw2.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -35,8 +31,8 @@
       <file leaf-file-name="hw2.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hw2.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="919">
-              <caret line="65" column="5" lean-forward="false" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
+            <state relative-caret-position="391">
+              <caret line="49" column="4" lean-forward="false" selection-start-line="49" selection-start-column="4" selection-end-line="49" selection-end-column="4" />
               <folding>
                 <element signature="e#66#85#0" expanded="true" />
               </folding>
@@ -324,12 +320,12 @@
       <option name="presentableId" value="Default" />
       <updated>1493091034381</updated>
       <workItem from="1493091040669" duration="766000" />
-      <workItem from="1493092618955" duration="3015000" />
+      <workItem from="1493092618955" duration="3615000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3781000" />
+    <option name="totallyTimeSpent" value="4381000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="3026" height="1946" extended-state="6" />
@@ -410,8 +406,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hw2.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="919">
-          <caret line="65" column="5" lean-forward="false" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
+        <state relative-caret-position="391">
+          <caret line="49" column="4" lean-forward="false" selection-start-line="49" selection-start-column="4" selection-end-line="49" selection-end-column="4" />
           <folding>
             <element signature="e#66#85#0" expanded="true" />
           </folding>

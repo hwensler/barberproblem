@@ -47,7 +47,7 @@ using namespace std;
 //declare customers - 26 so it enters the while loop to get input
 int customerCount = 26;
 
-main() {
+int main() {
 
     //introduce the program
     cout << "Welcome to the barber shop!\n";

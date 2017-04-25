@@ -46,9 +46,15 @@ using namespace std;
  * waiting chairs - user input (use semaphore)
  */
 
+//this semaphor is for the waiting room chairs.
+//there should be as many resources as there are chairs
+sem_t waitChairs;
+
+//this is for the barber's chair. there should only be one (mutex).
+sem_t mutexBarber;
 
 void *VisitBarber(void *threadID){
-
+    sem_wait(&wait)
 }
 
 
@@ -84,12 +90,10 @@ int main() {
     //create semaphores
 
     //this semaphor is for the waiting room chairs.
-    //there should be as many resources as there are chairs
-    sem_t waitChairs;
+    // there should be as many resources as there are chairs
     sem_init(&waitChairs, 0, numChairs);
 
     //this is for the barber's chair. there should only be one (mutex).
-    sem_t mutexBarber;
     sem_init(&mutexBarber, 0 , 1);
 
     //create thread ids

@@ -76,8 +76,18 @@ int main() {
         }
     }
 
+    //declare waiting chairs
+    int numChairs;
+    cout << "How many chairs are there in the waiting room? \n";
+    cin >> numChairs;
+
     //create semaphores
+
+    //this semaphor is for the waiting room chairs.
+    //there should be as many resources as there are chairs
     sem_t waitChairs;
+
+    //this is for the barber's chair. there should only be one (mutex).
     sem_t mutexBarber;
 
     //create thread ids

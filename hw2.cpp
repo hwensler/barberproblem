@@ -8,8 +8,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <pthread.h>
-#include <fstream>
 #include <sstream>
+
+using namespace std;
 
 
 /**
@@ -49,16 +50,18 @@ int customerCount = 26;
 main() {
 
     //introduce the program
-    cout << "Welcome to the barber shop!/n";
+    cout << "Welcome to the barber shop!\n";
     //get the number of customers - must be between 0 and 25
     while (customerCount > 25 || customerCount < 0){
-        cout << "How many customers are there?/n"
-                "There must be between 0 and 25 customers./n";
+        cout << "How many customers are there?\n"
+                "There must be between 0 and 25 customers.\n";
         cin >> customerCount;
 
-        //if still in the loop
-        cout << "Sorry, you entered " + customerCount " which is not between 0 and"
-                "25. /n";
+        //if the customercount is still invalid
+        if(customerCount > 25 || customerCount < 0){
+            cout << "Sorry, you entered ";
+            cout << customerCount;
+            cout << " which is not between 0 and 25. \n";
+        }
     }
-
 }

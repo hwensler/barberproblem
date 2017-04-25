@@ -52,13 +52,13 @@ int main() {
     //introduce the program
     cout << "Welcome to the barber shop!\n";
     //get the number of customers - must be between 0 and 25
-    while (customerCount > 25 || customerCount < 0){
+    while (customerCount > 25 || customerCount < 0) {
         cout << "How many customers are there?\n"
                 "There must be between 0 and 25 customers.\n";
         cin >> customerCount;
 
         //if the customercount is still invalid
-        if(customerCount > 25 || customerCount < 0){
+        if (customerCount > 25 || customerCount < 0) {
             cout << "Sorry, you entered ";
             cout << customerCount;
             cout << " which is not between 0 and 25. \n";
@@ -82,13 +82,20 @@ int main() {
     pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_JOINABLE);
 
     //create threads
-    for(int i = 0; i < customerCount; i++){
+    for (int i = 0; i < customerCount; i++) {
         cout << "creating thread, " << i << endl;
-        errorCheck = pthread_create(&threads[i], &attribute, VisitBarber, (void *)i);
+        errorCheck = pthread_create(&threads[i], &attribute, VisitBarber, (void *) i);
+
+        //check that the threads were created
+        if (errorCheck) {
+            cout << "Error: unable to create thread " << errorCheck << endl;
+            exit(-1);
+        }
     }
 
-
+    pthread_exit(NULL);
     //create a thread for each customer
 
     //put them in an array
+
 }

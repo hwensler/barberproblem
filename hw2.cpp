@@ -64,4 +64,11 @@ int main() {
             cout << " which is not between 0 and 25. \n";
         }
     }
+
+    //create thread ids
+    pthread_t threads[customerCount];
+
+    //create a thread for each customer
+
+    //put them in an array
 }

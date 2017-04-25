@@ -148,19 +148,28 @@ int main() {
     pthread_attr_init(&attribute);
     pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_JOINABLE);
 
+    //create an array of structs to pass to threads
+    thread_details allThreads[customerCount];
+
 
     //create threads
     for (int i = 0; i < customerCount; i++) {
+        //create struct to pass info to VisitBarber
+        allThreads[i].totalCustomers = customerCount;
+        allThreads[i].threadID = i;
+
+        //create a pointer to be sent to the thread
+        thread_details *tempThread;
+
+        //assign pointer to the correct struct in allThreads
+        tempThread = &allThreads[i];
+
         //thread creation = leaving for the barber shop
         cout << "Customer " << i;
         cout << " is leaving for the barber shop. ";
 
-        //create struct to pass info to VisitBarber
-        struct thread_details *thread_args;
-        thread_args->totalCustomers = customerCount;
-        thread_args->threadID = i;
-
-        errorCheck = pthread_create(&threads[i], &attribute, &VisitBarber, (void *)thread_args);
+        //create the thread
+        errorCheck = pthread_create(&threads[i], &attribute, &VisitBarber, (void *)tempThread);
 
         //check that the threads were created
         if (errorCheck) {

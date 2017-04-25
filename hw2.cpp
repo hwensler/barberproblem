@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <pthread.h>
 #include <sstream>
+#include <stdio.h>
+#include <semaphore.h>
 
 using namespace std;
 
@@ -45,6 +47,7 @@ using namespace std;
  */
 
 void *VisitBarber(void *threadID){
+
 }
 
 

@@ -37,4 +37,28 @@
  * 5. if the barber chair is occupied by a customer
  * sit in a waiting chair. if there are no waiting chairs,
  * wait for a chair.
+ *
+ * Resources:
+ * barber chair - 1 (use mutex lock)
+ * waiting chairs - user input (use semaphore)
  */
+
+//declare customers - 26 so it enters the while loop to get input
+int customerCount = 26;
+
+main() {
+
+    //introduce the program
+    cout << "Welcome to the barber shop!/n";
+    //get the number of customers - must be between 0 and 25
+    while (customerCount > 25 || customerCount < 0){
+        cout << "How many customers are there?/n"
+                "There must be between 0 and 25 customers./n";
+        cin >> customerCount;
+
+        //if still in the loop
+        cout << "Sorry, you entered " + customerCount " which is not between 0 and"
+                "25. /n";
+    }
+
+}

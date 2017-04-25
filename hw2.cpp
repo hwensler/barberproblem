@@ -71,6 +71,9 @@ int main() {
     //create an int to determine if thread creation was successful
     int errorCheck;
 
+    //create thread attributes
+    pthread_attr_t attribute;
+
     //create a thread for each customer
 
     //put them in an array

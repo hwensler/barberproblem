@@ -25,3 +25,16 @@
  *
  * max customers = 25.
  */
+
+/**
+ * A customer
+ * 1. enters.
+ *
+ * 2. if the barber is asleep, wake the barber.
+ * 3. sit in the barber chair.
+ * 4. get their hair cut.
+ *
+ * 5. if the barber chair is occupied by a customer
+ * sit in a waiting chair. if there are no waiting chairs,
+ * wait for a chair.
+ */

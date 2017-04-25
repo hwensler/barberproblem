@@ -81,6 +81,12 @@ int main() {
     pthread_attr_init(&attribute);
     pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_JOINABLE);
 
+    //create threads
+    for(int i = 0; i < customerCount; i++){
+        cout << "creating thread, " << i << endl;
+        errorCheck = pthread_create(&threads[i], &attribute, VisitBarber, (void *)i);
+    }
+
 
     //create a thread for each customer
 

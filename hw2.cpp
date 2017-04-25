@@ -68,6 +68,9 @@ int main() {
     //create thread ids
     pthread_t threads[customerCount];
 
+    //create an int to determine if thread creation was successful
+    int errorCheck;
+
     //create a thread for each customer
 
     //put them in an array

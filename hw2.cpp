@@ -46,7 +46,7 @@ using namespace std;
  * waiting chairs - user input (use semaphore)
  */
 
-//this semaphor is for the waiting room chairs.
+//this semaphore is for the waiting room chairs.
 //there should be as many resources as there are chairs
 sem_t waitChairs;
 

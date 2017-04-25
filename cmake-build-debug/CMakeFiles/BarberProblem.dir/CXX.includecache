@@ -15,4 +15,8 @@ pthread.h
 -
 sstream
 -
+stdio.h
+-
+semaphore.h
+-
 

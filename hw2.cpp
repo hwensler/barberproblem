@@ -44,13 +44,17 @@ using namespace std;
  * waiting chairs - user input (use semaphore)
  */
 
-//declare customers - 26 so it enters the while loop to get input
-int customerCount = 26;
+
 
 int main() {
 
+
     //introduce the program
     cout << "Welcome to the barber shop!\n";
+
+    //declare customers - 26 so it enters the while loop to get input
+    int customerCount = 26;
+
     //get the number of customers - must be between 0 and 25
     while (customerCount > 25 || customerCount < 0) {
         cout << "How many customers are there?\n"

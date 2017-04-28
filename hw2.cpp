@@ -173,9 +173,6 @@ void *VisitBarber(void *customer_info){
     cout << "Customer " << p->threadID <<" arrived at the barber shop.\n ";
     pthread_mutex_unlock(&coutMutex);
 
-    //get the current value of the semaphore
-    int currentValue;
-    sem_getvalue(&emptyChairs, &currentValue);
 
     //if you can, take a seat
     sem_wait(&emptyChairs);  //empty chairs decreases by one

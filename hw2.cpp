@@ -124,14 +124,9 @@ void *GoToWork(void *customer_info){
 
         int customerID = getHaircut();
 
-        //they wake up the barber
-        pthread_mutex_lock(&coutMutex);
-        cout << "Customer " << customerID << " woke up the barber. \n";
-        pthread_mutex_unlock(&coutMutex);
-
         //then get their hair cut hair
         pthread_mutex_lock(&coutMutex);
-        cout << "The barber is cutting hair. ";
+        cout << "The barber is cutting hair. \n";
         pthread_mutex_unlock(&coutMutex);
 
         pthread_mutex_unlock(&waitMutex);
@@ -152,7 +147,7 @@ void *GoToWork(void *customer_info){
             pthread_mutex_lock(&coutMutex);
             cout << "The barber is sleeping. \n";
             pthread_mutex_unlock(&coutMutex);
-        }5
+        }
     }
 
 }
@@ -162,7 +157,7 @@ void *VisitBarber(void *customer_info){
     //*p is a pointer to this thread_details
     struct thread_details *p = (struct thread_details*) customer_info;
     pthread_mutex_lock(&coutMutex);
-    cout << "Customer " << p->threadID <<" arrived at the barber shop.\n ";
+    cout << "Customer " << p->threadID <<" arrived at the barber shop.\n";
     pthread_mutex_unlock(&coutMutex);
 
 
@@ -177,8 +172,19 @@ void *VisitBarber(void *customer_info){
     cout << "Customer " << p->threadID << " took a seat in the waiting room.\n";
     pthread_mutex_unlock(&coutMutex);
 
+
     pthread_mutex_unlock(&waitMutex);
     sem_post(&fullChairs);
+
+    int numFullChairs;
+    sem_getvalue(&fullChairs, &numFullChairs);
+
+    //if nobody is in the waiting room, wake up the barber
+    if(numFullChairs == 1){
+        pthread_mutex_lock(&coutMutex);
+        cout << "Customer " << p->threadID << " woke up the barber. \n";
+        pthread_mutex_unlock(&coutMutex);
+    }
 
 
 }
@@ -296,14 +302,10 @@ int main() {
             cout << "Error:unable to join," << results << endl;
             exit(-1);
         }
-        pthread_mutex_lock(&coutMutex);
-        cout << "Main: completed thread id :" << i;
-        cout << "  exiting with status :" << status << endl;
-        pthread_mutex_unlock(&coutMutex);
 
     }
 
-    cout << "Main: program exiting." << endl;
+    cout << "The barber is going home for the day. " << endl;
 
     cout.flush();
     pthread_exit(NULL);

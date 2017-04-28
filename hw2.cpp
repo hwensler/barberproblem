@@ -49,10 +49,11 @@ using namespace std;
 
 //this semaphore is for the waiting room chairs.
 //there should be as many resources as there are chairs
-sem_t waitChairs;
+sem_t emptyChairs;
 
-//this is for the barber's chair. there should only be one (mutex).
-sem_t mutexBarber;
+//there should be a semaphore for full chairs
+//it should start at 0
+sem_t fullChairs;
 
 
 //this is for the cout function. there should only be one (mutex).
@@ -68,6 +69,53 @@ struct thread_details{
     int totalCustomers;
 };
 
+void *GoToWork(void *customer_info){
+
+    struct thread_details *p = (struct thread_details*) customer_info;
+
+    //at first the barber is always sleeping
+    pthread_mutex_lock(&coutMutex);
+    cout << "The barber is sleeping";
+    pthread_mutex_unlock(&coutMutex);
+
+    //for every customer, be in this loop
+    for(int i = 0; i < p->totalCustomers; i++){
+        //if there is a full chair
+        int numFullChairs;
+        sem_getvalue(&fullChairs, &numFullChairs);
+
+        if(numFullChairs > 0){
+            //cut their hair
+            pthread_mutex_lock(&coutMutex);
+            cout << "The barber is cutting hair";
+            pthread_mutex_unlock(&coutMutex);
+
+        }
+        //else
+        else{
+            //go to sleep
+            pthread_mutex_lock(&coutMutex);
+            cout << "The barber is sleeping. ";
+            pthread_mutex_unlock(&coutMutex);
+
+            //and wait for someone else to show up
+            sem_wait(&fullChairs);
+
+            //then cut their hair
+            pthread_mutex_lock(&coutMutex);
+            cout << "The barber is cutting hair. ";
+            pthread_mutex_unlock(&coutMutex);
+
+            //which frees up a chair
+            sem_post(&emptyChairs);
+
+        }
+
+    }
+
+}
+
+
 void *VisitBarber(void *customer_info){
     //*p is a pointer to this thread_details
     struct thread_details *p = (struct thread_details*) customer_info;
@@ -77,33 +125,28 @@ void *VisitBarber(void *customer_info){
 
     //get the current value of the semaphore
     int currentValue;
-    sem_getvalue(&waitChairs, &currentValue);
+    sem_getvalue(&emptyChairs, &currentValue);
 
     //if you can, take a seat
-    sem_wait(&waitChairs);
+    sem_wait(&emptyChairs);  //empty chairs decreases by one
     pthread_mutex_lock(&coutMutex);
     cout << "Customer " << p->threadID << " took a seat in the waiting room.\n";
     pthread_mutex_unlock(&coutMutex);
+    sem_post(&fullChairs);
 
     //if you're the first person to arrive, wake the barber
-    if(currentValue == p->totalCustomers){
+    //put a mutex lock around this???????? since only one person can be waking up the barber
+    if(currentValue == p->totalCustomers - 1){
         pthread_mutex_lock(&coutMutex);
         cout << "Customer " << p->threadID << " woke the barber.\n";
         pthread_mutex_unlock(&coutMutex);
     }
 
-    //get your hair cut
-    sem_wait(&mutexBarber);
-    sem_post(&waitChairs);  //free your waiting room chair
+    //leave the barber shop
     pthread_mutex_lock(&coutMutex);
-    cout << "Customer " << p->threadID << " has a new haircut.\n";
+    cout << "Customer " << p->threadID << " is leaving the barber shop.\n";
     pthread_mutex_unlock(&coutMutex);
 
-    //free the barber chair
-    pthread_mutex_lock(&coutMutex);
-    cout << "Customer " << p->threadID << " is leaving the barber shop. \n";
-    pthread_mutex_unlock(&coutMutex);
-    sem_post(&mutexBarber);
 }
 
 
@@ -136,12 +179,12 @@ int main() {
     cout << "How many chairs are there in the waiting room? \n";
     cin >> numChairs;
 
-    //this semaphor is for the waiting room chairs.
+    //this semaphor is for the empty waiting room chairs.
     // there should be as many resources as there are chairs
-    sem_init(&waitChairs, 0, numChairs);
+    sem_init(&emptyChairs, 0, numChairs);
 
-    //this is for the barber's chair. there should only be one (mutex).
-    sem_init(&mutexBarber, 0 , 1);
+    //this semaphor is for the full waiting room chairs.
+    sem_init(&emptyChairs, 0, 0);
 
     //create thread ids
     pthread_t threads[customerCount];

@@ -137,15 +137,28 @@ void *GoToWork(void *customer_info){
             //and wait for someone else to show up
             sem_wait(&fullChairs);
 
+            pthread_mutex_lock(&waitMutex);
+
+            int customerID = getHaircut();
+
             //then cut their hair
             pthread_mutex_lock(&coutMutex);
             cout << "The barber is cutting hair. ";
             pthread_mutex_unlock(&coutMutex);
 
+            pthread_mutex_unlock(&waitMutex);
+
             //which frees up a chair
             sem_post(&emptyChairs);
 
+            //and that customer leaves
+            pthread_mutex_lock(&coutMutex);
+            cout << "Customer " << customerID << " is leaving the barber shop. ";
+            pthread_mutex_unlock(&coutMutex);
+
         }
+
+
 
     }
 
@@ -165,9 +178,17 @@ void *VisitBarber(void *customer_info){
 
     //if you can, take a seat
     sem_wait(&emptyChairs);  //empty chairs decreases by one
+
+    //now add the user to the waiting room
+    pthread_mutex_lock(&waitMutex);
+
+    joinLine(p->threadID);
     pthread_mutex_lock(&coutMutex);
     cout << "Customer " << p->threadID << " took a seat in the waiting room.\n";
     pthread_mutex_unlock(&coutMutex);
+
+    pthread_mutex_unlock(&waitMutex);
+
     sem_post(&fullChairs);
 
     //if you're the first person to arrive, wake the barber

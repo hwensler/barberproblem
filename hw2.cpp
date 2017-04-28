@@ -109,58 +109,50 @@ void *GoToWork(void *customer_info){
 
     struct thread_details *p = (struct thread_details*) customer_info;
 
+    //the barber is always sleeping at first
+    pthread_mutex_lock(&coutMutex);
+    cout << "The barber is sleeping. \n";
+    pthread_mutex_unlock(&coutMutex);
+
     //for every customer, be in this loop
     for(int i = 0; i < p->totalCustomers; i++){
+
+        //and wait for someone to show up
+        sem_wait(&fullChairs);
+
+        pthread_mutex_lock(&waitMutex);
+
+        int customerID = getHaircut();
+
+        //they wake up the barber
+        pthread_mutex_lock(&coutMutex);
+        cout << "Customer " << customerID << " woke up the barber. \n";
+        pthread_mutex_unlock(&coutMutex);
+
+        //then get their hair cut hair
+        pthread_mutex_lock(&coutMutex);
+        cout << "The barber is cutting hair. ";
+        pthread_mutex_unlock(&coutMutex);
+
+        pthread_mutex_unlock(&waitMutex);
+
+        //which frees up a chair
+        sem_post(&emptyChairs);
+
+        //and that customer leaves
+        pthread_mutex_lock(&coutMutex);
+        cout << "Customer " << customerID << " is leaving the barber shop. \n";
+        pthread_mutex_unlock(&coutMutex);
+
         //if there is a full chair
         int numFullChairs;
         sem_getvalue(&fullChairs, &numFullChairs);
-
-        if(numFullChairs > 0){
-            //cut their hair
-            pthread_mutex_lock(&coutMutex);
-            cout << "The barber is cutting hair. \n";
-            pthread_mutex_unlock(&coutMutex);
-
-        }
-        //else
-        else{
-            //go to sleep
+        if(numFullChairs == 0){
+            //the barber is sleeping
             pthread_mutex_lock(&coutMutex);
             cout << "The barber is sleeping. \n";
             pthread_mutex_unlock(&coutMutex);
-
-            //and wait for someone else to show up
-            sem_wait(&fullChairs);
-
-
-            pthread_mutex_lock(&waitMutex);
-
-            int customerID = getHaircut();
-
-            //they wake up the barber
-            pthread_mutex_lock(&coutMutex);
-            cout << "Customer " << customerID << " woke up the barber. \n";
-            pthread_mutex_unlock(&coutMutex);
-
-            //then get their hair cut hair
-            pthread_mutex_lock(&coutMutex);
-            cout << "The barber is cutting hair. ";
-            pthread_mutex_unlock(&coutMutex);
-
-            pthread_mutex_unlock(&waitMutex);
-
-            //which frees up a chair
-            sem_post(&emptyChairs);
-
-            //and that customer leaves
-            pthread_mutex_lock(&coutMutex);
-            cout << "Customer " << customerID << " is leaving the barber shop. \n";
-            pthread_mutex_unlock(&coutMutex);
-
-        }
-
-
-
+        }5
     }
 
 }

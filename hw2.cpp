@@ -249,7 +249,7 @@ int main() {
     thread_details allThreads[customerCount];
 
     //create barber thread
-    pthread_create(&barberThread, 0, &GoToWork, 0);
+    pthread_create(&barberThread, &attribute, &GoToWork, 0);
 
     //create customer threads
     for (int i = 0; i < customerCount; i++) {

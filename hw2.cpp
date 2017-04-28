@@ -248,8 +248,19 @@ int main() {
     //create an array of structs to pass to threads
     thread_details allThreads[customerCount];
 
+    //create struct to pass to barber thread
+    thread_details *barberInfo;
+
+    thread_details tempStruct;
+    tempStruct.totalCustomers = customerCount;
+    tempStruct.threadID = 666; //a random id so I can use this struct
+
+    //set up a pointer to point to it
+    barberInfo = &tempStruct;
+
     //create barber thread
-    pthread_create(&barberThread, &attribute, &GoToWork, 0);
+    pthread_create(&barberThread, &attribute, &GoToWork, (void *) barberInfo);
+
 
     //create customer threads
     for (int i = 0; i < customerCount; i++) {

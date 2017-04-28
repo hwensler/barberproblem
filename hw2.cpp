@@ -118,7 +118,7 @@ void *GoToWork(void *customer_info){
         if(numFullChairs > 0){
             //cut their hair
             pthread_mutex_lock(&coutMutex);
-            cout << "The barber is cutting hair";
+            cout << "The barber is cutting hair. \n";
             pthread_mutex_unlock(&coutMutex);
 
         }
@@ -126,23 +126,23 @@ void *GoToWork(void *customer_info){
         else{
             //go to sleep
             pthread_mutex_lock(&coutMutex);
-            cout << "The barber is sleeping. ";
+            cout << "The barber is sleeping. \n";
             pthread_mutex_unlock(&coutMutex);
 
             //and wait for someone else to show up
             sem_wait(&fullChairs);
-
-            //they wake up the barber
-            pthread_mutex_lock(&coutMutex);
-            cout << "Customer " << p->threadID << " woke up the barber. ";
-            pthread_mutex_unlock(&coutMutex);
 
 
             pthread_mutex_lock(&waitMutex);
 
             int customerID = getHaircut();
 
-            //then cut their hair
+            //they wake up the barber
+            pthread_mutex_lock(&coutMutex);
+            cout << "Customer " << customerID << " woke up the barber. \n";
+            pthread_mutex_unlock(&coutMutex);
+
+            //then get their hair cut hair
             pthread_mutex_lock(&coutMutex);
             cout << "The barber is cutting hair. ";
             pthread_mutex_unlock(&coutMutex);
@@ -154,7 +154,7 @@ void *GoToWork(void *customer_info){
 
             //and that customer leaves
             pthread_mutex_lock(&coutMutex);
-            cout << "Customer " << customerID << " is leaving the barber shop. ";
+            cout << "Customer " << customerID << " is leaving the barber shop. /n";
             pthread_mutex_unlock(&coutMutex);
 
         }
@@ -226,7 +226,7 @@ int main() {
     sem_init(&emptyChairs, 0, numChairs);
 
     //this semaphor is for the full waiting room chairs.
-    sem_init(&emptyChairs, 0, 0);
+    sem_init(&fullChairs, 0, 0);
 
     //create thread ids
     pthread_t threads[customerCount];

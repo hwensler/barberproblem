@@ -15,44 +15,11 @@
 
 using namespace std;
 
-
-/**
- *The barber shop has one barber, one barber chair, and n chairs for
- * waiting customers, if any, to sit on. If there are no customers present,
- * the barber sits down in the barber chair and falls asleep.
- * When a customer arrives and the barber is sleeping, s/he has to wake
- * up the sleeping barber. If additional customers arrive while the
- * barber is cutting a customer’s hair, they either sit down (if
- * there are empty chairs) or wait for the empty chairs (if all chairs
- * are full). The problem is to program the barber and the customers
- * without getting into race conditions.
- *
- * max customers = 25.
- */
-
-/**
- * A customer
- * 1. enters.
- *
- * 2. if the barber is asleep, wake the barber.
- * 3. sit in the barber chair.
- * 4. get their hair cut.
- *
- * 5. if the barber chair is occupied by a customer
- * sit in a waiting chair. if there are no waiting chairs,
- * wait for a chair.
- *
- * Resources:
- * barber chair - 1 (use mutex lock)
- * waiting chairs - user input (use semaphore)
- */
-
-
-
 //initialize the waiting room - max 25 customers
 int waitingRoom[25];
 
 //make the first index 0 for fill and use
+//this tells where in the waiting room to put and remove people from
 int addToLine = 0;
 int removeFromLine  = 0;
 
@@ -150,6 +117,7 @@ void *GoToWork(void *customer_info){
         }
     }
 
+    return NULL;
 }
 
 
@@ -186,7 +154,7 @@ void *VisitBarber(void *customer_info){
         pthread_mutex_unlock(&coutMutex);
     }
 
-
+    return NULL;
 }
 
 
@@ -305,8 +273,10 @@ int main() {
 
     }
 
+    //tell the user the program is over.
     cout << "The barber is going home for the day. " << endl;
 
+    //clear things out and end!
     cout.flush();
     pthread_exit(NULL);
 

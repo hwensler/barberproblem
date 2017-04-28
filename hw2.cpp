@@ -195,7 +195,7 @@ int main() {
     sem_init(&fullChairs, 0, 0);
 
     //create thread ids
-    pthread_t threads[customerCount];
+    pthread_t *threads = new pthread_t[customerCount];
     pthread_t barberThread;
 
     //create an int to determine if thread creation was successful
@@ -212,7 +212,7 @@ int main() {
     pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_JOINABLE);
 
     //create an array of structs to pass to threads
-    thread_details allThreads[customerCount];
+    thread_details *allThreads = new thread_details[customerCount];
 
     //create struct to pass to barber thread
     thread_details *barberInfo;

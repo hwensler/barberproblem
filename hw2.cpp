@@ -47,6 +47,12 @@ using namespace std;
  * waiting chairs - user input (use semaphore)
  */
 
+//define max number of customers
+#define MAX 25;
+
+//initialize the waiting room
+int waitingRoom[MAX];
+
 //this semaphore is for the waiting room chairs.
 //there should be as many resources as there are chairs
 sem_t emptyChairs;
@@ -60,7 +66,7 @@ sem_t fullChairs;
 //it makes cout legible
 pthread_mutex_t coutMutex = PTHREAD_MUTEX_INITIALIZER;
 
-//create struct to pass to VisitBarber
+//create struct to pass to thread functions
 struct thread_details{
     //the thread id
     int threadID;
@@ -68,6 +74,11 @@ struct thread_details{
     //the total number of threads
     int totalCustomers;
 };
+
+//create an array of the customers in line
+int getHaircut(){
+    int id = waitingRoom[25];
+}
 
 void *GoToWork(void *customer_info){
 

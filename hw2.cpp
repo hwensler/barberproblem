@@ -154,7 +154,7 @@ void *GoToWork(void *customer_info){
 
             //and that customer leaves
             pthread_mutex_lock(&coutMutex);
-            cout << "Customer " << customerID << " is leaving the barber shop. /n";
+            cout << "Customer " << customerID << " is leaving the barber shop. \n";
             pthread_mutex_unlock(&coutMutex);
 
         }

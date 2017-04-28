@@ -53,8 +53,8 @@ using namespace std;
 int waitingRoom[25];
 
 //make the first index 0 for fill and use
-int fill = 0;
-int use = 0;
+int addToLine = 0;
+int removeFromLine  = 0;
 
 //this semaphore is for the waiting room chairs.
 //there should be as many resources as there are chairs
@@ -84,10 +84,10 @@ struct thread_details{
 //join the line
 void joinLine(int id){
     //add that thread id to the line
-    waitingRoom[fill] = id;
+    waitingRoom[addToLine] = id;
 
     //increment fill
-    fill++;
+    addToLine++;
 
 }
 
@@ -95,10 +95,10 @@ void joinLine(int id){
 int getHaircut(){
 
     // this person is getting a haircut
-    int id = waitingRoom[use];
+    int id = waitingRoom[removeFromLine];
 
     //increment use
-    use++;
+    removeFromLine++;
 
     //return the user who got the haircut
     return id;
@@ -108,11 +108,6 @@ int getHaircut(){
 void *GoToWork(void *customer_info){
 
     struct thread_details *p = (struct thread_details*) customer_info;
-
-    //at first the barber is always sleeping
-    pthread_mutex_lock(&coutMutex);
-    cout << "The barber is sleeping";
-    pthread_mutex_unlock(&coutMutex);
 
     //for every customer, be in this loop
     for(int i = 0; i < p->totalCustomers; i++){
@@ -136,6 +131,12 @@ void *GoToWork(void *customer_info){
 
             //and wait for someone else to show up
             sem_wait(&fullChairs);
+
+            //they wake up the barber
+            pthread_mutex_lock(&coutMutex);
+            cout << "Customer " << p->threadID << " woke up the barber. ";
+            pthread_mutex_unlock(&coutMutex);
+
 
             pthread_mutex_lock(&waitMutex);
 
@@ -181,28 +182,15 @@ void *VisitBarber(void *customer_info){
 
     //now add the user to the waiting room
     pthread_mutex_lock(&waitMutex);
-
     joinLine(p->threadID);
+
     pthread_mutex_lock(&coutMutex);
     cout << "Customer " << p->threadID << " took a seat in the waiting room.\n";
     pthread_mutex_unlock(&coutMutex);
 
     pthread_mutex_unlock(&waitMutex);
-
     sem_post(&fullChairs);
 
-    //if you're the first person to arrive, wake the barber
-    //put a mutex lock around this???????? since only one person can be waking up the barber
-    if(currentValue == p->totalCustomers - 1){
-        pthread_mutex_lock(&coutMutex);
-        cout << "Customer " << p->threadID << " woke the barber.\n";
-        pthread_mutex_unlock(&coutMutex);
-    }
-
-    //leave the barber shop
-    pthread_mutex_lock(&coutMutex);
-    cout << "Customer " << p->threadID << " is leaving the barber shop.\n";
-    pthread_mutex_unlock(&coutMutex);
 
 }
 
@@ -245,6 +233,7 @@ int main() {
 
     //create thread ids
     pthread_t threads[customerCount];
+    pthread_t barberThread;
 
     //create an int to determine if thread creation was successful
     int errorCheck;
@@ -262,8 +251,10 @@ int main() {
     //create an array of structs to pass to threads
     thread_details allThreads[customerCount];
 
+    //create barber thread
+    pthread_create(&barberThread, 0, &GoToWork, 0);
 
-    //create threads
+    //create customer threads
     for (int i = 0; i < customerCount; i++) {
         //create struct to pass info to VisitBarber
         allThreads[i].totalCustomers = customerCount;
